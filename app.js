@@ -1,5 +1,19 @@
+// Direccion de la API
+const API = "https://worldcup26.ir";
+
+// Pide datos a la API y devuelve el resultado
+async function pedirDatos(ruta) {
+  const respuesta = await fetch(API + ruta);
+  const datos = await respuesta.json();
+  return { datos: datos, viejo: false };
+}
+//--------------------------------------------------------
+
+
 // Carga la funcion de cada pantalla
 const cargadores = {};
+
+//--------------------------------------------------------
 
 // Muestra una pantalla y esconde las demas
 function mostrarPantalla(id) {
