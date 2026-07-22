@@ -26,3 +26,6 @@ nav {
   background: #1f4e79;
   color: white;
 }
+/* Estilos para las pantallas */ 
+/* Muestra una a la vez */
+.pantalla { display: none; }
