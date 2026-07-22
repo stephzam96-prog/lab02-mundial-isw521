@@ -2,7 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
-  background: #f2f2f2;
+  background: #939494c6;
 }
 
 h1 { text-align: center; }
@@ -29,3 +29,24 @@ nav {
 /* Estilos para las pantallas */ 
 /* Muestra una a la vez */
 .pantalla { display: none; }
+
+/* Estilos para las tarjetas de sede  */
+.tarjeta-sede {
+  display: inline-block;
+  margin: 5px;
+  padding: 12px;
+  border: 2px solid #ccc;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.tarjeta-sede.activa {
+  border-color: #1f4e79;
+  background: #dfeaf5;
+}
+.partido {
+  background: white;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 6px;
+}
