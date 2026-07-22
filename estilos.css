@@ -6,3 +6,23 @@ body {
 }
 
 h1 { text-align: center; }
+
+/* Estilos para la barra de navegación */
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.boton-nav {
+  padding: 10px 15px;
+  border: none;
+  background: #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.boton-nav.activo {
+  background: #1f4e79;
+  color: white;
+}
