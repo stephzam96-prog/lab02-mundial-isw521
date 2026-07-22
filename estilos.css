@@ -50,3 +50,27 @@ nav {
   margin: 5px 0;
   border-radius: 6px;
 }
+
+/* Estilos para la agenda simultanea */
+#agenda-columnas {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.columna {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+.skeleton {
+  height: 80px;
+  background: #ddd;
+  border-radius: 8px;
+  animation: parpadeo 1s infinite alternate;
+}
+@keyframes parpadeo {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
