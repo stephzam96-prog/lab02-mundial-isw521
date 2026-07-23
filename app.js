@@ -125,10 +125,14 @@ async function cargarTour() {
     boton.className = "tarjeta-sede";
 
     //Contenido del boton con nombre, ciudad, pais y capacidad
+
     boton.innerHTML =
+      "<span class='region'>" + sede.region + "</span><br>" +
       "<strong>" + sede.name_en + "</strong><br>" +
       sede.city_en + ", " + sede.country_en + "<br>" +
       "Capacidad: " + Number(sede.capacity).toLocaleString();
+
+
     boton.addEventListener("click", function () {
       document.querySelectorAll(".tarjeta-sede").forEach(function (b) {
         b.classList.remove("activa");
