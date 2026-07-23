@@ -1,3 +1,7 @@
+:root {
+  --color-equipo: #457b9d;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -83,3 +87,6 @@ nav {
   height: 30px;
 }
 
+#dashboard-contenido h3 {
+  color: var(--color-equipo);
+}
