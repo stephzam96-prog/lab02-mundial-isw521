@@ -2,28 +2,63 @@
 const API = "https://worldcup26.ir";
 
 const aviso = document.getElementById("aviso");
+
 function mostrarAviso(texto) {
   aviso.textContent = texto;
   aviso.style.display = texto ? "block" : "none";
 }
 
+// Espera cierta cantidad de segundos
+function esperar(segundos) {
+  return new Promise(function (listo) {
+    setTimeout(listo, segundos * 1000);
+  });
+}
+
+// Muestra una cuenta atras en el aviso (para el 429 y el 500)
+async function cuentaAtras(codigo, segundos) {
+  for (let s = segundos; s > 0; s--) {
+    mostrarAviso("Error " + codigo + ". Reintentando en " + s + " segundos...");
+    await esperar(1);
+  }
+}
+
 async function pedirDatos(ruta) {
-  try {
-    const respuesta = await fetch(API + ruta);
-    const datos = await respuesta.json();
-    // Guardamos una copia por si luego falla la conexion
-    localStorage.setItem("copia_" + ruta, JSON.stringify(datos));
-    mostrarAviso("");
-    return { datos: datos, viejo: false };
-  } catch (error) {
-    console.log("No se pudo cargar " + ruta + ":", error);
-    // Buscamos la copia guardada (modo offline)
-    const copia = localStorage.getItem("copia_" + ruta);
-    if (copia) {
-      mostrarAviso("Mostrando datos guardados (no actualizados).");
-      return { datos: JSON.parse(copia), viejo: true };
+  const url = API + ruta;
+  const esperas = [1, 2, 4, 8]; // segundos antes de cada reintento
+
+  for (let intento = 0; intento <= esperas.length; intento++) {
+    try {
+      const respuesta = await fetch(url);
+
+      if (respuesta.ok) {
+        const datos = await respuesta.json();
+        localStorage.setItem("copia_" + ruta, JSON.stringify(datos));
+        mostrarAviso("");
+        return { datos: datos, viejo: false };
+      }
+
+      // Errores 500 o 429: reintentamos esperando cada vez mas
+      if ((respuesta.status === 500 || respuesta.status === 429) && intento < esperas.length) {
+        await cuentaAtras(respuesta.status, esperas[intento]);
+        continue;
+      }
+
+      throw new Error("La API respondio con error " + respuesta.status);
+
+    } catch (error) {
+      if (intento < esperas.length) {
+        await cuentaAtras("de conexion", esperas[intento]);
+        continue;
+      }
+      console.log("No se pudo cargar " + ruta + ":", error);
+      const copia = localStorage.getItem("copia_" + ruta);
+      if (copia) {
+        mostrarAviso("Mostrando datos guardados (no actualizados).");
+        return { datos: JSON.parse(copia), viejo: true };
+      }
+      throw error;
     }
-    throw error;
   }
 }
 
