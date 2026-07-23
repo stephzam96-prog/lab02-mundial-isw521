@@ -123,6 +123,8 @@ async function cargarTour() {
   sedes.forEach(function (sede) {
     const boton = document.createElement("button");
     boton.className = "tarjeta-sede";
+
+    //Contenido del boton con nombre, ciudad, pais y capacidad
     boton.innerHTML =
       "<strong>" + sede.name_en + "</strong><br>" +
       sede.city_en + ", " + sede.country_en + "<br>" +
@@ -161,10 +163,9 @@ async function mostrarPartidosDeSede(sede) {
   if (deLaSede.length === 0) {
     html += "<p>No hay partidos en esta sede.</p>";
   } else {
-    deLaSede.forEach(function (p) {
-      html += "<div class='partido'>" + p.local_date + " — " +
-        p.home_team_name_en + " vs " + p.away_team_name_en + "</div>";
-    });
+      deLaSede.forEach(function (p) {
+      html += htmlPartido(p);
+    }); 
   }
   zona.innerHTML = html;
 }
@@ -240,14 +241,17 @@ function dibujarFechaAgenda() {
   delDia.forEach(function (p) {
     const columna = document.createElement("div");
     columna.className = "columna";
-    columna.innerHTML =
-      "<h4>" + p.home_team_name_en + "<br>vs<br>" + p.away_team_name_en + "</h4>" +
+    const vs = p.finished === "TRUE" ? (p.home_score + " - " + p.away_score) : "vs";
+        columna.innerHTML =
+      "<h4>" + p.home_team_name_en + "<br>" + vs + "<br>" + p.away_team_name_en + "</h4>" +
       "<p>" + p.local_date.split(" ")[1] + "</p>";
     contenedor.appendChild(columna);
   });
 }
 
 cargadores.agenda = cargarAgenda;
+
+
 
 
 // ------------   Pantalla 3: Timeline Infinito ----------------
@@ -296,11 +300,7 @@ function insertarMas() {
   const lista = document.getElementById("timeline-lista");
   const siguientes = partidosTimeline.slice(mostrados, mostrados + 10);
   siguientes.forEach(function (p) {
-    const div = document.createElement("div");
-    div.className = "partido";
-    div.textContent = p.local_date + " — " +
-      p.home_team_name_en + " vs " + p.away_team_name_en;
-    lista.appendChild(div);
+    lista.innerHTML += htmlPartido(p);
   });
   mostrados = mostrados + siguientes.length;
   if (mostrados >= partidosTimeline.length && observador) {
@@ -391,8 +391,7 @@ async function mostrarEquipoFavorito(idEquipo) {
   }
   html += "<h4>Sus partidos:</h4>";
   susPartidos.forEach(function (p) {
-    html += "<div class='partido'>" + p.local_date + " — " +
-      p.home_team_name_en + " vs " + p.away_team_name_en + "</div>";
+    html += htmlPartido(p);
   });
   zona.innerHTML = html;
 }
@@ -478,3 +477,21 @@ function dibujarMatrizGrupo(nombre, equiposGrupo, partidos) {
 }
 
 cargadores.matriz = cargarMatriz;
+
+// Arma el HTML de un partido con su marcador y su estado
+function htmlPartido(p) {
+  let marcador;
+  let estado;
+  if (p.finished === "TRUE") {
+    marcador = p.home_score + " - " + p.away_score;
+    estado = "<span class='estado finalizado'>Finalizado</span>";
+  } else {
+    marcador = "vs";
+    estado = "<span class='estado pendiente'>Pendiente</span>";
+  }
+  return "<div class='partido'>" +
+    "<span class='fecha'>" + p.local_date + "</span> " +
+    p.home_team_name_en + " <strong>" + marcador + "</strong> " + p.away_team_name_en +
+    " " + estado +
+    "</div>";
+}

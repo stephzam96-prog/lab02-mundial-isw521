@@ -158,3 +158,21 @@ nav {
   font-size: 14px;
 }
 
+/* Estilos timeline y dashboard (marcador, finalizado o pendiente) */
+.estado {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.finalizado {
+  background: #d7f0e4;
+  color: #0f6e56;
+}
+.pendiente {
+  background: #eeeeee;
+  color: #666666;
+}
+.fecha {
+  color: #888888;
+  font-size: 12px;
+}
