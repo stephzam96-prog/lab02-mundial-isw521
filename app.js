@@ -38,6 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
       mostrarPantalla(boton.dataset.pantalla);
     });
   });
+  
+  document.getElementById("agenda-anterior").addEventListener("click", function () {
+    if (indiceFecha > 0) { indiceFecha--; dibujarFechaAgenda(); }
+  });
+  document.getElementById("agenda-siguiente").addEventListener("click", function () {
+    if (indiceFecha < fechasAgenda.length - 1) { indiceFecha++; dibujarFechaAgenda(); }
+  });
+
   mostrarPantalla("tour"); // arrancamos en la primera
 });
 
@@ -105,3 +113,80 @@ async function mostrarPartidosDeSede(sede) {
 
 // Registrar esta pantalla
 cargadores.tour = cargarTour;
+
+
+// -------------  Pantalla 2: Agenda Simultanea ----------------
+
+// Convierte "06/11/2026 13:00" en una fecha de verdad, para poder ordenar
+function aFecha(texto) {
+  const partes = texto.split(" ");
+  const dia = partes[0].split("/");
+  const hora = partes[1].split(":");
+  return new Date(dia[2], dia[0] - 1, dia[1], hora[0], hora[1]);
+}
+
+// ===== Pantalla 2: Agenda Simultanea =====
+let fechasAgenda = [];
+let indiceFecha = 0;
+let partidosPorFecha = {};
+
+async function cargarAgenda() {
+  const contenedor = document.getElementById("agenda-columnas");
+  contenedor.innerHTML =
+    "<div class='columna'><div class='skeleton'></div></div>" +
+    "<div class='columna'><div class='skeleton'></div></div>";
+
+  let partidos = [];
+  try {
+    const resultado = await pedirDatos("/get/games");
+    partidos = resultado.datos.games;
+  } catch (error) {
+    contenedor.innerHTML = "<p>No se pudieron cargar los partidos.</p>";
+    return;
+  }
+
+  partidosPorFecha = {};
+  partidos.forEach(function (p) {
+    const dia = p.local_date.split(" ")[0];
+    if (!partidosPorFecha[dia]) { partidosPorFecha[dia] = []; }
+    partidosPorFecha[dia].push(p);
+  });
+
+  fechasAgenda = Object.keys(partidosPorFecha).filter(function (dia) {
+    return partidosPorFecha[dia].length >= 2;
+  });
+  fechasAgenda.sort(function (a, b) {
+    return aFecha(a + " 00:00") - aFecha(b + " 00:00");
+  });
+
+  indiceFecha = 0;
+  dibujarFechaAgenda();
+}
+
+function dibujarFechaAgenda() {
+  const contenedor = document.getElementById("agenda-columnas");
+  const etiqueta = document.getElementById("agenda-fecha");
+
+  if (fechasAgenda.length === 0) {
+    etiqueta.textContent = "";
+    contenedor.innerHTML = "<p>No hay fechas con partidos simultaneos.</p>";
+    return;
+  }
+
+  const fecha = fechasAgenda[indiceFecha];
+  etiqueta.textContent = " " + fecha + " (" + (indiceFecha + 1) +
+    " de " + fechasAgenda.length + ") ";
+
+  const delDia = partidosPorFecha[fecha];
+  contenedor.innerHTML = "";
+  delDia.forEach(function (p) {
+    const columna = document.createElement("div");
+    columna.className = "columna";
+    columna.innerHTML =
+      "<h4>" + p.home_team_name_en + "<br>vs<br>" + p.away_team_name_en + "</h4>" +
+      "<p>" + p.local_date.split(" ")[1] + "</p>";
+    contenedor.appendChild(columna);
+  });
+}
+
+cargadores.agenda = cargarAgenda;
