@@ -176,3 +176,11 @@ nav {
   color: #888888;
   font-size: 12px;
 }
+
+/* Banderas */
+.bandera {
+  width: 24px;
+  height: 16px;
+  border-radius: 3px;
+  vertical-align: middle;
+}

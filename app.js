@@ -382,7 +382,8 @@ async function mostrarEquipoFavorito(idEquipo) {
     });
   });
 
-  let html = "<h3>" + nombre + "</h3>";
+  const bandera = equipo ? "<img class='bandera' src='" + equipo.flag + "'> " : "";
+  let html = "<h3>" + bandera + nombre + "</h3>";
   if (fila) {
     html += "<p>Puntos: " + fila.pts + " | Goles a favor: " + fila.gf +
       " | Goles en contra: " + fila.ga + "</p>";
@@ -450,12 +451,12 @@ function dibujarMatrizGrupo(nombre, equiposGrupo, partidos) {
 
   html += "<tr><th></th>";
   equiposGrupo.forEach(function (eq) {
-    html += "<th>" + eq.fifa_code + "</th>";
+    html += "<th><img class='bandera' src='" + eq.flag + "'><br>" + eq.fifa_code + "</th>";
   });
   html += "</tr>";
 
   equiposGrupo.forEach(function (filaEq) {
-    html += "<tr><th>" + filaEq.fifa_code + "</th>";
+    html += "<tr><th><img class='bandera' src='" + filaEq.flag + "'><br>" + filaEq.fifa_code + "</th>";
     equiposGrupo.forEach(function (colEq) {
       if (filaEq.id === colEq.id) {
         html += "<td class='diagonal'></td>";
@@ -477,6 +478,7 @@ function dibujarMatrizGrupo(nombre, equiposGrupo, partidos) {
 }
 
 cargadores.matriz = cargarMatriz;
+
 
 // Arma el HTML de un partido con su marcador y su estado
 function htmlPartido(p) {
