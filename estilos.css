@@ -118,15 +118,24 @@ nav {
 .matriz {
   border-collapse: collapse;
   margin-bottom: 25px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .matriz th, .matriz td {
-  border: 1px solid #999;
+  border: 1px solid #dcdcd4;
   padding: 8px;
   text-align: center;
   min-width: 60px;
+  font-size: 13px;
+}
+.matriz th {
+  background: #eaf3de;
+  color: #173404;
 }
 .matriz td.diagonal {
-  background: #888;
+  background: #8a8a84;
 }
 
 /* Aviso */
