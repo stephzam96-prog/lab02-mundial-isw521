@@ -84,11 +84,15 @@ nav {
 
 .columna {
   flex: 1;
-  background: white;
+  background: #eaf3de;
   padding: 15px;
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.columna h4 {
+  color: #173404;
+  margin: 0 0 6px;
 }
 
 .skeleton {
@@ -136,6 +140,15 @@ nav {
 }
 .matriz td.diagonal {
   background: #8a8a84;
+}
+
+/* Contenido de la matriz (alineacion una al lado de la otra) */
+#matriz-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 /* Aviso */
