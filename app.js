@@ -1,3 +1,19 @@
+/*------------------------------------------------------------
+   1. Configuracion y avisos
+   2. Pedir datos a la API 
+   3. Navegacion entre pantallas
+   4. Pantalla 1 - Tour de Sedes   -> scrollIntoView
+   5. Pantalla 2 - Agenda          -> columnas / skeleton
+   6. Pantalla 3 - Timeline        -> IntersectionObserver
+   7. Pantalla 4 - Dashboard       -> localStorage + variables CSS
+   8. Pantalla 5 - Matriz          -> tabla 4x4
+   9. Ayudante htmlPartido
+   ---------------------------------------------------------- */
+
+
+
+// --- 1. Configuracion y avisos ------
+
 // Direccion de la API
 const API = "https://worldcup26.ir";
 
@@ -7,6 +23,11 @@ function mostrarAviso(texto) {
   aviso.textContent = texto;
   aviso.style.display = texto ? "block" : "none";
 }
+
+//--------------------------------------------------------
+
+// --- 2. Pedir datos a la API ------
+// async/await, errores 500 y 429,reintentos con espera 1-2-4-8 seg y modo offline.
 
 // Espera cierta cantidad de segundos
 function esperar(segundos) {
@@ -23,6 +44,7 @@ async function cuentaAtras(codigo, segundos) {
   }
 }
 
+// Pide datos a la API, con reintentos y cache localStorage
 async function pedirDatos(ruta) {
   const url = API + ruta;
   const esperas = [1, 2, 4, 8]; // segundos antes de cada reintento
@@ -61,14 +83,14 @@ async function pedirDatos(ruta) {
     }
   }
 }
-
 //--------------------------------------------------------
 
+// ---- 3. Navegacion entre pantallas ------
+// Cada pantalla tiene un id, y un boton de navegacion con data-pantalla="id".
 
 // Carga la funcion de cada pantalla
 const cargadores = {};
 
-//--------------------------------------------------------
 
 // Muestra una pantalla y esconde las demas
 function mostrarPantalla(id) {
@@ -103,8 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   mostrarPantalla("tour"); // arrancamos en la primera
 });
+//--------------------------------------------------------
 
-// -------------  Pantalla 1: Tour de Sedes -------------------------
+// ----  4. Pantalla 1 Tour de Sedes ----------
+// scrollIntoView (scroll suave a los partidos)
 
 async function cargarTour() {
   const listaSedes = document.getElementById("lista-sedes");
@@ -125,7 +149,6 @@ async function cargarTour() {
     boton.className = "tarjeta-sede";
 
     //Contenido del boton con nombre, ciudad, pais y capacidad
-
     boton.innerHTML =
       "<span class='region'>" + sede.region + "</span><br>" +
       "<strong>" + sede.name_en + "</strong><br>" +
@@ -178,7 +201,8 @@ async function mostrarPartidosDeSede(sede) {
 cargadores.tour = cargarTour;
 
 
-// -------------  Pantalla 2: Agenda Simultanea ----------------
+// ----  5. Pantalla 2: Agenda Simultanea ----------
+// Muestra las fechas que tienen partidos simultaneos, y permite navegar entre ellas
 
 // Convierte "06/11/2026 13:00" en una fecha de verdad, para poder ordenar
 function aFecha(texto) {
@@ -188,7 +212,6 @@ function aFecha(texto) {
   return new Date(dia[2], dia[0] - 1, dia[1], hora[0], hora[1]);
 }
 
-// ===== Pantalla 2: Agenda Simultanea =====
 let fechasAgenda = [];
 let indiceFecha = 0;
 let partidosPorFecha = {};
@@ -255,10 +278,11 @@ function dibujarFechaAgenda() {
 
 cargadores.agenda = cargarAgenda;
 
+//--------------------------------------------------------
 
 
-
-// ------------   Pantalla 3: Timeline Infinito ----------------
+// -----  6. Pantalla 3 - Timeline ---------
+// IntersectionObserver (cargar de 10 en 10)
 
 let partidosTimeline = [];
 let mostrados = 0;
@@ -313,8 +337,10 @@ function insertarMas() {
 }
 
 cargadores.timeline = cargarTimeline;
+//--------------------------------------------------------
 
-// ------------ Pantalla 4: Dashboard del Fanatico ----------------
+// ------- 7. Pantalla 4 - Dashboard --------
+// localStorage (guardar equipo) + variables CSS (color)
 
 let listaEquipos = [];
 
@@ -423,8 +449,10 @@ async function mostrarEquipoFavorito(idEquipo) {
 }
 
 cargadores.dashboard = cargarDashboard;
+//--------------------------------------------------------
 
-// ----------- Pantalla 5: Matriz de Enfrentamientos ----------------
+// -------  Pantalla 5 - Matriz Enfrentamientos -> tabla 4x4 ----------
+// tabla 4x4 cruzando grupos, equipos y partidos
 
 async function cargarMatriz() {
   const contenedor = document.getElementById("matriz-contenido");
@@ -503,8 +531,9 @@ function dibujarMatrizGrupo(nombre, equiposGrupo, partidos) {
 }
 
 cargadores.matriz = cargarMatriz;
+// --------------------------------------------------------
 
-
+// ---  9. Ayudante htmlPartido ---
 // Arma el HTML de un partido con su marcador y su estado
 function htmlPartido(p) {
   let marcador;
