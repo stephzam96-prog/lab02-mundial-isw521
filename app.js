@@ -1,12 +1,32 @@
 // Direccion de la API
 const API = "https://worldcup26.ir";
 
-// Pide datos a la API y devuelve el resultado
-async function pedirDatos(ruta) {
-  const respuesta = await fetch(API + ruta);
-  const datos = await respuesta.json();
-  return { datos: datos, viejo: false };
+const aviso = document.getElementById("aviso");
+function mostrarAviso(texto) {
+  aviso.textContent = texto;
+  aviso.style.display = texto ? "block" : "none";
 }
+
+async function pedirDatos(ruta) {
+  try {
+    const respuesta = await fetch(API + ruta);
+    const datos = await respuesta.json();
+    // Guardamos una copia por si luego falla la conexion
+    localStorage.setItem("copia_" + ruta, JSON.stringify(datos));
+    mostrarAviso("");
+    return { datos: datos, viejo: false };
+  } catch (error) {
+    console.log("No se pudo cargar " + ruta + ":", error);
+    // Buscamos la copia guardada (modo offline)
+    const copia = localStorage.getItem("copia_" + ruta);
+    if (copia) {
+      mostrarAviso("Mostrando datos guardados (no actualizados).");
+      return { datos: JSON.parse(copia), viejo: true };
+    }
+    throw error;
+  }
+}
+
 //--------------------------------------------------------
 
 

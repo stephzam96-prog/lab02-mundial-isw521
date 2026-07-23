@@ -105,3 +105,14 @@ nav {
 .matriz td.diagonal {
   background: #888;
 }
+
+/* Aviso */
+#aviso {
+  display: none;
+  background: #ffe8a3;
+  color: #6b4e00;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
