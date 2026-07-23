@@ -50,25 +50,29 @@ nav {
 /* Muestra una a la vez */
 .pantalla { display: none; }
 
-/* Estilos para las tarjetas de sede  */
+/* ------ Estilos para las tarjetas de sede ------ */
 .tarjeta-sede {
   display: inline-block;
   margin: 5px;
   padding: 12px;
-  border: 2px solid #ccc;
+  border: none;
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
 .tarjeta-sede.activa {
   border-color: #1f4e79;
   background: #dfeaf5;
 }
+
 .partido {
   background: white;
-  padding: 8px;
-  margin: 5px 0;
-  border-radius: 6px;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 /* Estilos para la agenda simultanea */
@@ -77,13 +81,16 @@ nav {
   gap: 10px;
   margin-top: 15px;
 }
+
 .columna {
   flex: 1;
   background: white;
   padding: 15px;
-  border-radius: 8px;
+  border-radius: 12px;
   text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
 .skeleton {
   height: 80px;
   background: #ddd;
