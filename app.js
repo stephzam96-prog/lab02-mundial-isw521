@@ -251,3 +251,92 @@ function insertarMas() {
 }
 
 cargadores.timeline = cargarTimeline;
+
+// ------------ Pantalla 4: Dashboard del Fanatico ----------------
+
+let listaEquipos = [];
+
+async function cargarDashboard() {
+  const selector = document.getElementById("selector-equipo");
+
+  let equipos = [];
+  try {
+    const resultado = await pedirDatos("/get/teams");
+    equipos = resultado.datos.teams;
+  } catch (error) {
+    document.getElementById("dashboard-contenido").innerHTML =
+      "<p>No se pudieron cargar los equipos.</p>";
+    return;
+  }
+  listaEquipos = equipos;
+
+  if (selector.children.length === 0) {
+    equipos.forEach(function (eq) {
+      const opcion = document.createElement("option");
+      opcion.value = eq.id;
+      opcion.textContent = eq.name_en;
+      selector.appendChild(opcion);
+    });
+    selector.addEventListener("change", function () {
+      localStorage.setItem("equipoFavorito", selector.value);
+      mostrarEquipoFavorito(selector.value);
+    });
+  }
+
+  const guardado = localStorage.getItem("equipoFavorito");
+  if (guardado) {
+    selector.value = guardado;
+    mostrarEquipoFavorito(guardado);
+  }
+}
+
+async function mostrarEquipoFavorito(idEquipo) {
+  const zona = document.getElementById("dashboard-contenido");
+  zona.innerHTML = "<p>Cargando...</p>";
+
+  const colores = ["#e63946", "#457b9d", "#2a9d8f", "#e9a02a", "#8e44ad"];
+  const color = colores[Number(idEquipo) % colores.length];
+  document.documentElement.style.setProperty("--color-equipo", color);
+
+  let partidos = [];
+  let grupos = [];
+  try {
+    const rp = await pedirDatos("/get/games");
+    partidos = rp.datos.games;
+    const rg = await pedirDatos("/get/groups");
+    grupos = rg.datos.groups;
+  } catch (error) {
+    zona.innerHTML = "<p>No se pudieron cargar los datos del equipo.</p>";
+    return;
+  }
+
+  const equipo = listaEquipos.find(function (e) { return e.id === idEquipo; });
+  const nombre = equipo ? equipo.name_en : "Equipo";
+
+  const susPartidos = partidos.filter(function (p) {
+    return p.home_team_id === idEquipo || p.away_team_id === idEquipo;
+  });
+
+  let fila = null;
+  grupos.forEach(function (g) {
+    g.teams.forEach(function (t) {
+      if (t.team_id === idEquipo) { fila = t; }
+    });
+  });
+
+  let html = "<h3>" + nombre + "</h3>";
+  if (fila) {
+    html += "<p>Puntos: " + fila.pts + " | Goles a favor: " + fila.gf +
+      " | Goles en contra: " + fila.ga + "</p>";
+  } else {
+    html += "<p>No se encontro su posicion en el grupo.</p>";
+  }
+  html += "<h4>Sus partidos:</h4>";
+  susPartidos.forEach(function (p) {
+    html += "<div class='partido'>" + p.local_date + " — " +
+      p.home_team_name_en + " vs " + p.away_team_name_en + "</div>";
+  });
+  zona.innerHTML = html;
+}
+
+cargadores.dashboard = cargarDashboard;
