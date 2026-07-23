@@ -1,7 +1,14 @@
+/* ============================================================
+   VARIABLES (colores que se pueden cambiar)
+   ============================================================ */
 :root {
   --color-equipo: #457b9d;
 }
 
+/* ============================================================
+   BASE Y FONDO DE CANCHA
+   El fondo verde a rayas se hace con repeating-linear-gradient
+   ============================================================ */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -15,164 +22,11 @@ body {
     #68a838 80px
   );
 }
-
 h1 { text-align: center; }
 
-/* ------ Estilos para la barra de navegación ------ */
-nav {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-/* ------ Estilos para los botones de navegación ----- */
-.boton-nav {
-  padding: 8px 18px;
-  border: none;
-  background: white;
-  color: #2c2c2a;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.boton-nav:hover {
-  background: #eaf3de;
-}
-.boton-nav.activo {
-  background: #173404;
-  color: #eaf3de;
-}
-
-
-/* Estilos para las pantallas */ 
-/* Muestra una a la vez */
-.pantalla { display: none; }
-
-/* ------ Estilos para las tarjetas de sede ------ */
-.tarjeta-sede {
-  display: inline-block;
-  margin: 5px;
-  padding: 12px;
-  border: none;
-  background: white;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.tarjeta-sede.activa {
-  border-color: #1f4e79;
-  background: #dfeaf5;
-}
-
-.partido {
-  background: white;
-  padding: 10px;
-  margin: 6px 0;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-/* Región, en el tour emoji */
-.region {
-  display: inline-block;
-  background: #356310;
-  color: #eaf3de;
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-bottom: 4px;
-}
-
-/* Estilos para la agenda simultanea */
-#agenda-columnas {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.columna {
-  flex: 1;
-  background: #eaf3de;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-.columna h4 {
-  color: #173404;
-  margin: 0 0 6px;
-}
-
-.skeleton {
-  height: 80px;
-  background: #ddd;
-  border-radius: 8px;
-  animation: parpadeo 1s infinite alternate;
-}
-@keyframes parpadeo {
-  from { opacity: 0.4; }
-  to   { opacity: 1; }
-}
-
-/* Timeline Infinito */
-#timeline-lista .partido {
-  border-left: 4px solid #1f4e79;
-}
-#centinela {
-  height: 30px;
-}
-
-#dashboard-contenido h3 {
-  color: var(--color-equipo);
-}
-
-/* Matriz de Enfrentamientos */
-.matriz {
-  border-collapse: collapse;
-  margin-bottom: 25px;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-.matriz th, .matriz td {
-  border: 1px solid #dcdcd4;
-  padding: 8px;
-  text-align: center;
-  min-width: 60px;
-  font-size: 13px;
-}
-.matriz th {
-  background: #eaf3de;
-  color: #173404;
-}
-.matriz td.diagonal {
-  background: #8a8a84;
-}
-
-/* Contenido de la matriz (alineacion una al lado de la otra) */
-#matriz-contenido {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-/* Aviso */
-#aviso {
-  display: none;
-  background: #ffe8a3;
-  color: #6b4e00;
-  padding: 10px;
-  text-align: center;
-  margin-bottom: 10px;
-  border-radius: 6px;
-}
-
-/* Cabecera */
+/* ============================================================
+   CABECERA (el banner verde de arriba)
+   ============================================================ */
 .cabecera {
   background: #356310;
   color: #eaf3de;
@@ -190,7 +44,60 @@ nav {
   font-size: 14px;
 }
 
-/* Estilos timeline y dashboard (marcador, finalizado o pendiente) */
+/* ============================================================
+   AVISO (la barra amarilla de errores / datos viejos)
+   ============================================================ */
+#aviso {
+  display: none;
+  background: #ffe8a3;
+  color: #6b4e00;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   NAVEGACION (menu de arriba, botones tipo pastilla)
+   ============================================================ */
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.boton-nav {
+  padding: 8px 18px;
+  border: none;
+  background: white;
+  color: #2c2c2a;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.boton-nav:hover {
+  background: #eaf3de;
+}
+.boton-nav.activo {
+  background: #173404;
+  color: #eaf3de;
+}
+
+/* Cada pantalla se esconde; el JS muestra solo una a la vez */
+.pantalla { display: none; }
+
+/* ============================================================
+   PARTIDOS (se usan en varias pantallas)
+   La cajita del partido, el estado y la bandera
+   ============================================================ */
+.partido {
+  background: white;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
 .estado {
   font-size: 11px;
   padding: 2px 8px;
@@ -208,8 +115,6 @@ nav {
   color: #888888;
   font-size: 12px;
 }
-
-/* Banderas */
 .bandera {
   width: 24px;
   height: 16px;
@@ -217,26 +122,84 @@ nav {
   vertical-align: middle;
 }
 
-/* Cajas en Dashboard (Puntos, Goles a favor, Goles en contra)*/
-.cajitas {
-  display: flex;
-  gap: 10px;
-  margin: 10px 0;
-}
-.cajita {
-  flex: 1;
-  background: #eaf3de;
-  color: #173404;
+/* ============================================================
+   PANTALLA 1: TOUR DE SEDES
+   Tarjetas de sede + insignia de region
+   ============================================================ */
+.tarjeta-sede {
+  display: inline-block;
+  margin: 5px;
   padding: 12px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 13px;
+  border: none;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-.cajita b {
-  font-size: 22px;
+.tarjeta-sede.activa {
+  border-color: #1f4e79;
+  background: #dfeaf5;
+}
+.region {
+  display: inline-block;
+  background: #356310;
+  color: #eaf3de;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 4px;
 }
 
-/* Perfil del equipo (dashboard) */
+/* ============================================================
+   PANTALLA 2: AGENDA SIMULTANEA
+   Columnas (layout dividido) + esqueleto de carga
+   ============================================================ */
+#agenda-columnas {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.columna {
+  flex: 1;
+  background: #eaf3de;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.columna h4 {
+  color: #173404;
+  margin: 0 0 6px;
+}
+.skeleton {
+  height: 80px;
+  background: #ddd;
+  border-radius: 8px;
+  animation: parpadeo 1s infinite alternate;
+}
+@keyframes parpadeo {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+/* ============================================================
+   PANTALLA 3: TIMELINE INFINITO
+   Lista con linea azul + el centinela del final
+   ============================================================ */
+#timeline-lista .partido {
+  border-left: 4px solid #1f4e79;
+}
+#centinela {
+  height: 30px;
+}
+
+/* ============================================================
+   PANTALLA 4: DASHBOARD DEL FANATICO
+   Perfil del equipo, cajitas de stats y variable de color
+   ============================================================ */
+#dashboard-contenido {
+  margin-top: 15px;
+}
 .perfil {
   background: white;
   border-radius: 12px;
@@ -276,8 +239,54 @@ nav {
 .perfil-body {
   padding: 14px;
 }
-
-#dashboard-contenido {
-  margin-top: 15px;
+.cajitas {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+.cajita {
+  flex: 1;
+  background: #eaf3de;
+  color: #173404;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+.cajita b {
+  font-size: 22px;
 }
 
+/* ============================================================
+   PANTALLA 5: MATRIZ DE ENFRENTAMIENTOS
+   Tabla por grupo, encabezados verdes, diagonal deshabilitada
+   ============================================================ */
+#matriz-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.matriz {
+  border-collapse: collapse;
+  margin-bottom: 25px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.matriz th, .matriz td {
+  border: 1px solid #dcdcd4;
+  padding: 8px;
+  text-align: center;
+  min-width: 60px;
+  font-size: 13px;
+}
+.matriz th {
+  background: #eaf3de;
+  color: #173404;
+}
+.matriz td.diagonal {
+  background: #8a8a84;
+}
