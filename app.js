@@ -382,10 +382,25 @@ async function mostrarEquipoFavorito(idEquipo) {
     });
   });
 
-  const bandera = equipo ? "<img class='bandera' src='" + equipo.flag + "'> " : "";
-  let html = "<h3>" + bandera + nombre + "</h3>";
+    // Insignias del grupo y el codigo del pais
+  let insignias = "";
+  if (equipo) {
+    insignias =
+      "<span class='badge'>Grupo " + equipo.groups + "</span>" +
+      "<span class='badge'>" + equipo.fifa_code + "</span>";
+  }
 
-    if (fila) {
+  const banderaGrande = equipo ? "<img class='bandera-grande' src='" + equipo.flag + "'>" : "";
+
+  // Cabecera del perfil: bandera grande + nombre + insignias
+  let html = "<div class='perfil'>";
+  html += "<div class='perfil-top'>" + banderaGrande +
+    "<div><div class='perfil-nombre'>" + nombre + "</div>" +
+    "<div class='badges'>" + insignias + "</div></div></div>";
+
+  // Cuerpo del perfil: cajitas de stats + partidos
+  html += "<div class='perfil-body'>";
+  if (fila) {
     html += "<div class='cajitas'>" +
       "<div class='cajita'><b>" + fila.pts + "</b><br>Puntos</div>" +
       "<div class='cajita'><b>" + fila.gf + "</b><br>Goles a favor</div>" +
@@ -394,11 +409,12 @@ async function mostrarEquipoFavorito(idEquipo) {
   } else {
     html += "<p>No se encontro su posicion en el grupo.</p>";
   }
-
   html += "<h4>Sus partidos:</h4>";
   susPartidos.forEach(function (p) {
     html += htmlPartido(p);
   });
+  html += "</div></div>";
+
   zona.innerHTML = html;
 }
 
