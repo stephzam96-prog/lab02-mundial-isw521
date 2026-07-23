@@ -123,7 +123,10 @@ async function cargarTour() {
   sedes.forEach(function (sede) {
     const boton = document.createElement("button");
     boton.className = "tarjeta-sede";
-    boton.textContent = sede.name_en + " (" + sede.city_en + ")";
+    boton.innerHTML =
+      "<strong>" + sede.name_en + "</strong><br>" +
+      sede.city_en + ", " + sede.country_en + "<br>" +
+      "Capacidad: " + Number(sede.capacity).toLocaleString();
     boton.addEventListener("click", function () {
       document.querySelectorAll(".tarjeta-sede").forEach(function (b) {
         b.classList.remove("activa");
