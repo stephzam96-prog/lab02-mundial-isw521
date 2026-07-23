@@ -90,3 +90,18 @@ nav {
 #dashboard-contenido h3 {
   color: var(--color-equipo);
 }
+
+/* Matriz de Enfrentamientos */
+.matriz {
+  border-collapse: collapse;
+  margin-bottom: 25px;
+}
+.matriz th, .matriz td {
+  border: 1px solid #999;
+  padding: 8px;
+  text-align: center;
+  min-width: 60px;
+}
+.matriz td.diagonal {
+  background: #888;
+}
