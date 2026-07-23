@@ -18,7 +18,7 @@ body {
 
 h1 { text-align: center; }
 
-/* Estilos para la barra de navegación */
+/* ------ Estilos para la barra de navegación ------ */
 nav {
   display: flex;
   gap: 8px;
@@ -26,17 +26,26 @@ nav {
   justify-content: center;
   margin-bottom: 20px;
 }
+
+/* ------ Estilos para los botones de navegación ----- */
 .boton-nav {
-  padding: 10px 15px;
+  padding: 8px 18px;
   border: none;
-  background: #ccc;
-  border-radius: 6px;
+  background: white;
+  color: #2c2c2a;
+  border-radius: 999px;
   cursor: pointer;
+  font-size: 14px;
+}
+.boton-nav:hover {
+  background: #eaf3de;
 }
 .boton-nav.activo {
-  background: #1f4e79;
-  color: white;
+  background: #173404;
+  color: #eaf3de;
 }
+
+
 /* Estilos para las pantallas */ 
 /* Muestra una a la vez */
 .pantalla { display: none; }
