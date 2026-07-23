@@ -190,3 +190,64 @@ function dibujarFechaAgenda() {
 }
 
 cargadores.agenda = cargarAgenda;
+
+
+// ------------   Pantalla 3: Timeline Infinito ----------------
+
+let partidosTimeline = [];
+let mostrados = 0;
+let observador = null;
+
+async function cargarTimeline() {
+  const lista = document.getElementById("timeline-lista");
+  lista.innerHTML = "<p>Cargando partidos...</p>";
+  mostrados = 0;
+
+  let partidos = [];
+  try {
+    const resultado = await pedirDatos("/get/games");
+    partidos = resultado.datos.games;
+  } catch (error) {
+    lista.innerHTML =
+      "<p>No se pudieron cargar los partidos.</p>" +
+      "<button id='reintentar-timeline'>Reintentar</button>";
+    document.getElementById("reintentar-timeline")
+      .addEventListener("click", cargarTimeline);
+    return;
+  }
+
+  partidos.sort(function (a, b) {
+    return aFecha(a.local_date) - aFecha(b.local_date);
+  });
+  partidosTimeline = partidos;
+
+  lista.innerHTML = "";
+  insertarMas();
+
+  const centinela = document.getElementById("centinela");
+  if (observador) { observador.disconnect(); }
+  observador = new IntersectionObserver(function (entradas) {
+    if (entradas[0].isIntersecting) {
+      insertarMas();
+    }
+  });
+  observador.observe(centinela);
+}
+
+function insertarMas() {
+  const lista = document.getElementById("timeline-lista");
+  const siguientes = partidosTimeline.slice(mostrados, mostrados + 10);
+  siguientes.forEach(function (p) {
+    const div = document.createElement("div");
+    div.className = "partido";
+    div.textContent = p.local_date + " — " +
+      p.home_team_name_en + " vs " + p.away_team_name_en;
+    lista.appendChild(div);
+  });
+  mostrados = mostrados + siguientes.length;
+  if (mostrados >= partidosTimeline.length && observador) {
+    observador.disconnect();
+  }
+}
+
+cargadores.timeline = cargarTimeline;
