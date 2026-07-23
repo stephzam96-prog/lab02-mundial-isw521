@@ -184,3 +184,23 @@ nav {
   border-radius: 3px;
   vertical-align: middle;
 }
+
+/* Cajas en Dashboard (Puntos, Goles a favor, Goles en contra)*/
+.cajitas {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+.cajita {
+  flex: 1;
+  background: #eaf3de;
+  color: #173404;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+.cajita b {
+  font-size: 22px;
+}
+

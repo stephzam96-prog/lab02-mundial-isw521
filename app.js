@@ -384,12 +384,17 @@ async function mostrarEquipoFavorito(idEquipo) {
 
   const bandera = equipo ? "<img class='bandera' src='" + equipo.flag + "'> " : "";
   let html = "<h3>" + bandera + nombre + "</h3>";
-  if (fila) {
-    html += "<p>Puntos: " + fila.pts + " | Goles a favor: " + fila.gf +
-      " | Goles en contra: " + fila.ga + "</p>";
+
+    if (fila) {
+    html += "<div class='cajitas'>" +
+      "<div class='cajita'><b>" + fila.pts + "</b><br>Puntos</div>" +
+      "<div class='cajita'><b>" + fila.gf + "</b><br>Goles a favor</div>" +
+      "<div class='cajita'><b>" + fila.ga + "</b><br>Goles en contra</div>" +
+      "</div>";
   } else {
     html += "<p>No se encontro su posicion en el grupo.</p>";
   }
+
   html += "<h4>Sus partidos:</h4>";
   susPartidos.forEach(function (p) {
     html += htmlPartido(p);
