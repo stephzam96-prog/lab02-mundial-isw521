@@ -340,3 +340,83 @@ async function mostrarEquipoFavorito(idEquipo) {
 }
 
 cargadores.dashboard = cargarDashboard;
+
+// ----------- Pantalla 5: Matriz de Enfrentamientos ----------------
+
+async function cargarMatriz() {
+  const contenedor = document.getElementById("matriz-contenido");
+  contenedor.innerHTML = "<p>Cargando grupos...</p>";
+
+  let grupos = [];
+  let equipos = [];
+  try {
+    const rg = await pedirDatos("/get/groups");
+    grupos = rg.datos.groups;
+    const re = await pedirDatos("/get/teams");
+    equipos = re.datos.teams;
+  } catch (error) {
+    contenedor.innerHTML = "<p>No se pudieron cargar los grupos.</p>";
+    return;
+  }
+
+  // Los partidos pueden fallar; si fallan, dibujamos todo en "Pendiente"
+  let partidos = [];
+  try {
+    const rp = await pedirDatos("/get/games");
+    partidos = rp.datos.games;
+  } catch (error) {
+    partidos = [];
+  }
+
+  contenedor.innerHTML = "";
+  grupos.forEach(function (g) {
+    const equiposGrupo = g.teams.map(function (t) {
+      return equipos.find(function (e) { return e.id === t.team_id; });
+    }).filter(function (e) { return e; });
+    contenedor.appendChild(dibujarMatrizGrupo(g.name, equiposGrupo, partidos));
+  });
+}
+
+function buscarPartido(partidos, idA, idB) {
+  return partidos.find(function (p) {
+    const jugado = p.finished === "TRUE";
+    const sonEllos =
+      (p.home_team_id === idA && p.away_team_id === idB) ||
+      (p.home_team_id === idB && p.away_team_id === idA);
+    return sonEllos && jugado;
+  });
+}
+
+function dibujarMatrizGrupo(nombre, equiposGrupo, partidos) {
+  const caja = document.createElement("div");
+  let html = "<h3>Grupo " + nombre + "</h3><table class='matriz'>";
+
+  html += "<tr><th></th>";
+  equiposGrupo.forEach(function (eq) {
+    html += "<th>" + eq.fifa_code + "</th>";
+  });
+  html += "</tr>";
+
+  equiposGrupo.forEach(function (filaEq) {
+    html += "<tr><th>" + filaEq.fifa_code + "</th>";
+    equiposGrupo.forEach(function (colEq) {
+      if (filaEq.id === colEq.id) {
+        html += "<td class='diagonal'></td>";
+      } else {
+        const juego = buscarPartido(partidos, filaEq.id, colEq.id);
+        if (juego) {
+          html += "<td>" + juego.home_score + " - " + juego.away_score + "</td>";
+        } else {
+          html += "<td>Pendiente</td>";
+        }
+      }
+    });
+    html += "</tr>";
+  });
+
+  html += "</table>";
+  caja.innerHTML = html;
+  return caja;
+}
+
+cargadores.matriz = cargarMatriz;
